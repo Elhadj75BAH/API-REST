@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
         $faker->addProvider(new Commerce($faker));
-        $users = [];//users
+        $products = [];//Products
         for($p = 0; $p<25; $p++){
             $product = new Product();
             $product->setName($faker->productName)
@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
                 ->setImage($faker->imageUrl)
                 ->setPrice(mt_rand(100 , 600));
             $manager->persist($product);
-            $users[]=$product;//users and product
+            $products[]=$product;//products
         }
 
         $clients = [];
@@ -56,7 +56,7 @@ class AppFixtures extends Fixture
                 ->setEmail("user$u@user.fr")
                 ->setAvatar($faker->imageUrl())
                 ->setClient($clients [array_rand($clients )])
-                ->addProduct($users[array_rand($users)])
+                ->addProduct($products[array_rand($products)])
             ;
 
             $manager->persist($user);

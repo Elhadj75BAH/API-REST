@@ -20,18 +20,21 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups("client:read")
+     * @Groups("user:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("client:read")
+     * @Groups("user:read")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups("client:read")
+     * @Groups("user:read")
      */
     private $email;
 
@@ -49,6 +52,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("client:read")
+     * @Groups("user:read")
      */
     private $logo;
 

@@ -48,8 +48,19 @@ class ApiProductController extends AbstractController
         // On envoie la réponse
         return $response;
 
-        /* return $this->json([
-             'product' => $products,
-         ]);*/
+    }
+
+
+    /**
+     * @Route("/api/product/details/{id}", name="api_product_detail", methods={"GET"})
+     */
+    public function detail($id): Response
+    {
+        $product = $this->entitymanager->getRepository(Product::class)->findOneById($id);
+
+        $response = $this->json($product,200,[],['groups'=>'product:read']);
+        return $response;
+
+
     }
 }

@@ -23,7 +23,7 @@ class ApiUserController extends AbstractController
 
 
     /**
-     * @Route("/api/user-client/{id}", name="api_user",methods={"GET"})
+     * @Route("/api/user-client/{id}", name="api_user_detail",methods={"GET"})
      */
     public function detail($id,UserRepository $userRepository): Response
     {
@@ -33,4 +33,7 @@ class ApiUserController extends AbstractController
         return $response;
 
     }
+
+
+
 }

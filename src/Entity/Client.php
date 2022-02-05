@@ -58,6 +58,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="client")
+     *  @Groups("client:read")
      */
     private $user;
 

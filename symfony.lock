@@ -23,6 +23,9 @@
     "doctrine/common": {
         "version": "3.2.1"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.5.2"
+    },
     "doctrine/dbal": {
         "version": "3.2.1"
     },
@@ -43,6 +46,18 @@
             "config/packages/test/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -82,11 +97,38 @@
     "doctrine/sql-formatter": {
         "version": "1.1.2"
     },
+    "fakerphp/faker": {
+        "version": "v1.18.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },
     "laminas/laminas-code": {
         "version": "4.5.1"
+    },
+    "lcobucci/clock": {
+        "version": "2.0.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.1.5"
+    },
+    "lexik/jwt-authentication-bundle": {
+        "version": "2.14",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "5b2157bcd5778166a5696e42f552ad36529a07a6"
+        },
+        "files": [
+            "config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
+    "mbezhanov/faker-provider-collection": {
+        "version": "2.0.1"
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
@@ -221,6 +263,9 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.24.0"
     },
+    "symfony/polyfill-php56": {
+        "version": "v1.20.0"
+    },
     "symfony/polyfill-php73": {
         "version": "v1.24.0"
     },
@@ -279,6 +324,9 @@
     "symfony/security-http": {
         "version": "v5.4.2"
     },
+    "symfony/serializer": {
+        "version": "v5.4.3"
+    },
     "symfony/service-contracts": {
         "version": "v2.5.0"
     },
@@ -287,6 +335,22 @@
     },
     "symfony/string": {
         "version": "v5.4.2"
+    },
+    "symfony/translation-contracts": {
+        "version": "v2.5.0"
+    },
+    "symfony/validator": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "3eb8df139ec05414489d55b97603c5f6ca0c44cb"
+        },
+        "files": [
+            "config/packages/test/validator.yaml",
+            "config/packages/validator.yaml"
+        ]
     },
     "symfony/var-dumper": {
         "version": "v5.4.2"

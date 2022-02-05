@@ -19,6 +19,18 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * Method pour sélectionner la Liste des utilisateurs
+     * @return array
+     */
+    public function apiFindAll() :array
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('u.id','u.firstName','u.avatar');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

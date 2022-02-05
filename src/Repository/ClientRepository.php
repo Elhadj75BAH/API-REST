@@ -36,6 +36,18 @@ class ClientRepository extends ServiceEntityRepository implements PasswordUpgrad
         $this->_em->flush();
     }
 
+    /**
+     * Method pour sélectionner la liste des clients
+     * @return array
+     */
+    public function apiFindAll() :array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.id','c.name','c.logo');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
     // /**
     //  * @return Client[] Returns an array of Client objects
     //  */

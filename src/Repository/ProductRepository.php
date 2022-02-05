@@ -26,7 +26,7 @@ class ProductRepository extends ServiceEntityRepository
     public function apiFindAll() :array
     {
         $qb = $this->createQueryBuilder('p')
-            ->select('p.id','p.name','p.description','p.image','p.price');
+            ->select('p.id','p.name','p.image');
         $query = $qb->getQuery();
         return $query->execute();
     }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,11 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiUserController extends AbstractController
 {
     /**
-     * @Route("/api/users-client", name="api_user",methods={"GET"})
+     * @Route("/api/users", name="api_user",methods={"GET"})
      */
     public function index(UserRepository $userRepository): Response
     {
-        $users = $userRepository->findAll();
+        $users = $userRepository->apiFindAll();
 
         $response = $this->json($users, 200,[],['groups'=>'user:read']);
         return $response;
@@ -23,17 +24,14 @@ class ApiUserController extends AbstractController
 
 
     /**
-     * @Route("/api/user-client/{id}", name="api_user_detail",methods={"GET"})
+     * @Route("/api/users/{id}", name="api_user_detail",methods={"GET"})
      */
-    public function detail($id,UserRepository $userRepository): Response
+    public function detail(User $user): Response
     {
-        $users = $userRepository->findOneById($id);
-
-        $response = $this->json($users, 200,[],['groups'=>'user:read']);
+        $response = $this->json($user, 200,[],['groups'=>'user:read']);
         return $response;
 
     }
-
 
 
 }

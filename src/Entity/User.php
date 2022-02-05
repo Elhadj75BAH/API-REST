@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -18,6 +19,7 @@ class User
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups("user:read")
+     * @Groups("client:read")
      */
     private $id;
 
@@ -25,24 +27,29 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("user:read")
+     * @Groups("client:read")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("user:read")
+     * @Groups("client:read")
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups("user:read")
+     * @Groups("client:read")
      */
     private $avatar;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("user:read")
+     * @Groups("client:read")
+     * @Assert\NotBlank(message="ce champ ne peut pas être null")
      */
     private $email;
 

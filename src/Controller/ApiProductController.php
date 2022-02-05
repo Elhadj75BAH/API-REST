@@ -52,7 +52,7 @@ class ApiProductController extends AbstractController
 
 
     /**
-     * @Route("/api/product/details/{id}", name="api_product_detail", methods={"GET"})
+     * @Route("/api/products/{id}", name="api_product_detail", methods={"GET"})
      */
     public function detail($id): Response
     {

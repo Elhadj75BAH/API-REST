@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
@@ -18,11 +20,11 @@ class ApiUserController extends AbstractController
      *     description="Returns the list of registered users linked to a client on the website",
      * )
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request ): Response
     {
         $users = $userRepository->apiFindAll();
-
-        $response = $this->json($users, 200,[],['groups'=>'user:read']);
+        $users = $paginator->paginate($users,$request->query->getInt('page',1),10);
+        $response = $this->json($users, 200,[],['groups'=>'user:read','pagination'=>$users]);
         return $response;
 
     }

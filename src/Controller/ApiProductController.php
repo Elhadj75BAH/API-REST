@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -31,9 +33,10 @@ class ApiProductController extends AbstractController
      *
      *     description="Return to the list of BileMo products")
      */
-    public function index(): Response
+    public function index(PaginatorInterface $paginator , Request $request): Response
     {
         $products = $this->entitymanager->getRepository(Product::class)->apiFindAll();
+        $products = $paginator->paginate($products,$request->query->getInt('page',1),10);
         // On indique qu'on utilise un json_encoder
         $encoders = [new JsonEncoder()];
         // On instancie le normalisez pour convertir la collection en un tableau

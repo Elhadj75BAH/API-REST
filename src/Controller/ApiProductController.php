@@ -10,6 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 
 class ApiProductController extends AbstractController
 {
@@ -22,6 +25,11 @@ class ApiProductController extends AbstractController
 
     /**
      * @Route("/api/products", name="api_product", methods={"GET"})
+     *
+     * @OA\Response(
+     *     response="200",
+     *
+     *     description="Return to the list of BileMo products")
      */
     public function index(): Response
     {
@@ -53,6 +61,17 @@ class ApiProductController extends AbstractController
 
     /**
      * @Route("/api/products/{id}", name="api_product_detail", methods={"GET"})
+     *
+     * @OA\Response(
+     *     response="200",
+     *     description="Returns the details of a BileMo product",
+     *
+     *      @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(ref=@Model(type=Product::class, groups={"product:read"}))
+     * )
+     * )
+
      */
     public function detail($id): Response
     {

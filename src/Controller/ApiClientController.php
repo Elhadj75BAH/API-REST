@@ -13,11 +13,22 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 
 class ApiClientController extends AbstractController
 {
     /**
      * @Route("/api/clients", name="api_client", methods={"GET"})
+     * @OA\Response(
+     *     response="200",
+     *     description="Return the list of clients",
+     *     @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(ref=@Model(type=Client::class, groups={"client:read"}))
+     * )
+     * )
      */
     public function index(ClientRepository $clientRepository): Response
     {
@@ -29,6 +40,15 @@ class ApiClientController extends AbstractController
 
     /**
      * @Route("/api/clients/{id}", name="api_client_detail", methods={"GET"})
+     * @OA\Response(
+     *     response="200",
+     *     description="Returns the details of a client with associated users",
+     *
+     *     @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(ref=@Model(type=Client::class, groups={"client:read"}))
+     * )
+     * )
      */
     public function details(ClientRepository $clientRepository, $id): Response
     {
@@ -41,6 +61,11 @@ class ApiClientController extends AbstractController
 
     /**
      * @Route("/api/clients/{id}/users", name="api_addUser_",methods={"POST"})
+     * @OA\Response(
+     *     response="201",
+     *     description="adds a new user linked to a client",
+     * )
+     *
      */
     public function addUser( Request $request,
                              SerializerInterface $serializer,
@@ -76,6 +101,10 @@ class ApiClientController extends AbstractController
 
     /**
      * @Route("/api/clients/{id}/users", name="api_User_delete",methods={"DELETE"})
+     *
+     * @OA\Response(
+     *     response="204",
+     *     description="deletes a user added by a client")
      */
     public function delete(EntityManagerInterface $em, User $user): Response
     {

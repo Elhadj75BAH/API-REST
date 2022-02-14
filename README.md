@@ -1,4 +1,4 @@
-# Création d'un web service exposant une API
+# Création d'un web service exposant une API REST
 Développement de la vitrine de téléphones mobiles de l’entreprise BileMo exposant un certain nombre d’API pour que les applications des autres plateformes web puissent effectuer des opérations
 
 En esposant Une API Rest avec le framework symfony. 

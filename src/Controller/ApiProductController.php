@@ -3,18 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -36,7 +31,7 @@ class ApiProductController extends AbstractController
      *
      *     description="Return to the list of BileMo products")
      *  @OA\Tag(name="Product")
-     * @OA\Parameter (in="query", name="page", required=false,  description="Page à recuperer ")
+     * @OA\Parameter(in="query", name="page", required=false,  description="Page à recuperer ")
      */
     public function index(PaginatorInterface $paginator , Request $request, CacheInterface $cache): Response
     {

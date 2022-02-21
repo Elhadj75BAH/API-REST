@@ -19,6 +19,7 @@ class ApiUserController extends AbstractController
      *     response="200",
      *     description="Returns the list of registered users linked to a client on the website",
      * )
+     * @OA\Tag(name="User")
      */
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request ): Response
     {
@@ -37,6 +38,7 @@ class ApiUserController extends AbstractController
      *     response="200",
      *     description="Returns the details of a registered user linked to a client",
      * )
+     * @OA\Tag(name="User")
      */
     public function detail(User $user): Response
     {

@@ -30,7 +30,7 @@ class ApiUserController extends AbstractController
                           CacheInterface $cache ): Response
     {
        $users = $cache->get('users',function (ItemInterface $item)use ($userRepository, $cache){
-           $item->expiresAfter(30);
+           $item->expiresAfter(3);
            return $userRepository->findAll();
        });
 

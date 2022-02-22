@@ -36,7 +36,7 @@ class ApiProductController extends AbstractController
     public function index(PaginatorInterface $paginator , Request $request, CacheInterface $cache): Response
     {
         $products = $cache->get('products',function (ItemInterface $item){
-            $item->expiresAfter(60);
+            $item->expiresAfter(3);
             return  $this->entitymanager->getRepository(Product::class)->findAll();
         });
 
@@ -66,7 +66,7 @@ class ApiProductController extends AbstractController
     public function detail($id, CacheInterface $cache): Response
     {
         $product = $cache->get('product',function (ItemInterface $item)use ($id){
-            $item->expiresAfter(60);
+            $item->expiresAfter(3);
             return $this->entitymanager->getRepository(Product::class)->findOneById($id);
         });
 

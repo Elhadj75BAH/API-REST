@@ -36,7 +36,7 @@ class ApiClientController extends AbstractController
     public function index(ClientRepository $clientRepository, CacheInterface $cache ): Response
     {
         $clients = $cache->get('clients',function (ItemInterface $item)use ($clientRepository){
-            $item->expiresAfter(60);
+            $item->expiresAfter(3);
             return $clientRepository->findAll();
         });
 
@@ -60,7 +60,7 @@ class ApiClientController extends AbstractController
     public function details(ClientRepository $clientRepository, $id , CacheInterface $cache): Response
     {
         $clients = $cache->get("clients",function (ItemInterface $item) use ($id, $clientRepository){
-            $item->expiresAfter(60);
+            $item->expiresAfter(3);
             return $clientRepository->findOneById($id);
         });
 

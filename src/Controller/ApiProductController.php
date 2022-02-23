@@ -9,12 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class ApiProductController extends AbstractController
 {
@@ -32,31 +30,20 @@ class ApiProductController extends AbstractController
      *     response="200",
      *
      *     description="Return to the list of BileMo products")
+     *  @OA\Tag(name="Product")
+     * @OA\Parameter(in="query", name="page", required=false,  description="Page à recuperer ")
      */
-    public function index(PaginatorInterface $paginator , Request $request): Response
+    public function index(PaginatorInterface $paginator , Request $request, CacheInterface $cache): Response
     {
-        $products = $this->entitymanager->getRepository(Product::class)->apiFindAll();
+        $products = $cache->get('products',function (ItemInterface $item){
+            $item->expiresAfter(3);
+            return  $this->entitymanager->getRepository(Product::class)->findAll();
+        });
+
         $products = $paginator->paginate($products,$request->query->getInt('page',1),10);
-        // On indique qu'on utilise un json_encoder
-        $encoders = [new JsonEncoder()];
-        // On instancie le normalisez pour convertir la collection en un tableau
-        $normalizers = [new ObjectNormalizer()];
-        // On converti en json
-        // On instancie le convertisseur
-        $serialser = new Serializer($normalizers, $encoders);
-        // On converti en json
-        $jsonContent = $serialser->serialize($products, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
 
-        // On instancie la réponse
-        $response = new Response($jsonContent);
-        // On ajoute l'entête HTTP
-        $response->headers->set('Content-Type', 'application/json');
-
-        // On envoie la réponse
+        $response = $this->json($products,200,[],['groups'=>'product-list:read']);
+        // On envoie la réponse*/
         return $response;
 
     }
@@ -74,11 +61,15 @@ class ApiProductController extends AbstractController
      *     @OA\Items(ref=@Model(type=Product::class, groups={"product:read"}))
      * )
      * )
-
+     * @OA\Tag(name="Product")
      */
-    public function detail($id): Response
+    public function detail($id, CacheInterface $cache): Response
     {
-        $product = $this->entitymanager->getRepository(Product::class)->findOneById($id);
+        $product = $cache->get('product',function (ItemInterface $item)use ($id){
+            $item->expiresAfter(3);
+            return $this->entitymanager->getRepository(Product::class)->findOneById($id);
+        });
+
 
         $response = $this->json($product,200,[],['groups'=>'product:read']);
         return $response;

@@ -19,22 +19,19 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("client:read")
-     * @Groups("user:read")
+     * @Groups({"client:read","user:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("client:read")
-     * @Groups("user:read")
+     * @Groups({"client:read","user:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups("client:read")
-     * @Groups("user:read")
+     * @Groups({"client:read","user-detail:read"})
      */
     private $email;
 
@@ -51,8 +48,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("client:read")
-     * @Groups("user:read")
+     * @Groups({"client-detail:read","user-detail:read"})
      */
     private $logo;
 
@@ -208,5 +204,14 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"client:read", "user:read",})
+     *
+     */
+    public function  getLinkClient(){
+        return "/api/clients/".$this->getId();
     }
 }

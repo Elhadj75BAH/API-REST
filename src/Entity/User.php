@@ -18,37 +18,32 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("user:read")
-     * @Groups("client:read")
+     * @Groups({"user:read","client:read"})
      */
     private $id;
 
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("user:read")
-     * @Groups("client:read")
+     * @Groups({"user:read","client-detail:read"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("user:read")
-     * @Groups("client:read")
+     * @Groups({"user:read","client-detail:read"})
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("user:read")
-     * @Groups("client:read")
+     * @Groups({"user-detail:read","client-detail:read"})
      */
     private $avatar;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("user:read")
-     * @Groups("client:read")
+     * @Groups({"user:read","client:read"})
      * @Assert\NotBlank(message="ce champ ne peut pas être null")
      */
     private $email;
@@ -158,5 +153,14 @@ class User
         $this->client = $client;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"user:read","client:read"})
+     *
+     */
+    public function  getLinkUser(){
+        return "/api/users/".$this->getId();
     }
 }

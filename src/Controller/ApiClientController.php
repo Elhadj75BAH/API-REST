@@ -14,8 +14,9 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class ApiClientController extends AbstractController
 {
@@ -29,10 +30,14 @@ class ApiClientController extends AbstractController
      *     @OA\Items(ref=@Model(type=Client::class, groups={"client:read"}))
      * )
      * )
+     * @OA\Tag(name="Client")
      */
-    public function index(ClientRepository $clientRepository): Response
+    public function index(ClientRepository $clientRepository, CacheInterface $cache ): Response
     {
-        $clients = $clientRepository->apiFindAll();
+        $clients = $cache->get('clients',function (ItemInterface $item)use ($clientRepository){
+            $item->expiresAfter(3);
+            return $clientRepository->findAll();
+        });
 
         $response = $this->json($clients,200,[],['groups'=>'client:read']);
         return $response;
@@ -46,18 +51,23 @@ class ApiClientController extends AbstractController
      *
      *     @OA\JsonContent(
      *     type="array",
-     *     @OA\Items(ref=@Model(type=Client::class, groups={"client:read"}))
+     *     @OA\Items(ref=@Model(type=Client::class, groups={"client:read","client-detail:read"}))
      * )
      * )
+     * @OA\Tag(name="Client")
      */
-    public function details(ClientRepository $clientRepository, $id): Response
+    public function details(ClientRepository $clientRepository, $id , CacheInterface $cache): Response
     {
-        $clients = $clientRepository->findOneById($id);
+        $clients = $cache->get("clients",function (ItemInterface $item) use ($id, $clientRepository){
+            $item->expiresAfter(3);
+            return $clientRepository->findOneById($id);
+        });
 
-        $response = $this->json($clients,200,[],['groups'=>'client:read']);
+        $response = $this->json($clients,200,[],[
+            'groups'=>['client:read','client-detail:read']
+        ]);
         return $response;
     }
-
 
     /**
      * @Route("/api/clients/{id}/users", name="api_addUser_",methods={"POST"})
@@ -65,7 +75,7 @@ class ApiClientController extends AbstractController
      *     response="201",
      *     description="adds a new user linked to a client",
      * )
-     *
+     * @OA\Tag(name="Client")
      */
     public function addUser( Request $request,
                              SerializerInterface $serializer,
@@ -98,16 +108,17 @@ class ApiClientController extends AbstractController
 
     }
 
-
     /**
      * @Route("/api/clients/{id}/users", name="api_User_delete",methods={"DELETE"})
      *
      * @OA\Response(
      *     response="204",
      *     description="deletes a user added by a client")
+     *  @OA\Tag(name="Client")
      */
-    public function delete(EntityManagerInterface $em, User $user): Response
+    public function delete(EntityManagerInterface $em, User $user , CacheInterface $cache): Response
     {
+            $cache->delete("clients");
             $em->remove($user);
             $em->flush();
             return $this->json(null,204,[]);

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -20,9 +21,18 @@ class ApiUserController extends AbstractController
      * @OA\Response(
      *     response="200",
      *     description="Returns the list of registered users linked to a client on the website",
+     *
+     *      @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(ref=@Model(type=User::class, groups={"user:read"}))
+     * )
      * )
      * @OA\Tag(name="User")
-     * @OA\Parameter(in="query",name="page",required=false,description="page à recuperer ")
+     * @OA\Parameter(
+     *     in="query",
+     *     name="page",
+     *     required=false,
+     *     description="page à recuperer ")
      */
     public function index(UserRepository $userRepository,
                           PaginatorInterface $paginator,
@@ -47,6 +57,11 @@ class ApiUserController extends AbstractController
      *  @OA\Response(
      *     response="200",
      *     description="Returns the details of a registered user linked to a client",
+     *
+     *      @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(ref=@Model(type=User::class, groups={"user:read","user-detail:read"}))
+     * )
      * )
      * @OA\Tag(name="User")
      */
@@ -54,7 +69,9 @@ class ApiUserController extends AbstractController
     {
         $response = $cache->get('users',function (ItemInterface $item)use ($user){
             $item->expiresAfter(3);
-            return $this->json($user, 200,[],['groups'=>'user:read']);
+            return $this->json($user, 200,[],[
+                'groups'=>['user:read','user-detail:read']
+            ]);
         });
 
         return $response;

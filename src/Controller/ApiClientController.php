@@ -14,7 +14,6 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -52,7 +51,7 @@ class ApiClientController extends AbstractController
      *
      *     @OA\JsonContent(
      *     type="array",
-     *     @OA\Items(ref=@Model(type=Client::class, groups={"client:read"}))
+     *     @OA\Items(ref=@Model(type=Client::class, groups={"client:read","client-detail:read"}))
      * )
      * )
      * @OA\Tag(name="Client")
@@ -64,11 +63,11 @@ class ApiClientController extends AbstractController
             return $clientRepository->findOneById($id);
         });
 
-
-        $response = $this->json($clients,200,[],['groups'=>'client:read']);
+        $response = $this->json($clients,200,[],[
+            'groups'=>['client:read','client-detail:read']
+        ]);
         return $response;
     }
-
 
     /**
      * @Route("/api/clients/{id}/users", name="api_addUser_",methods={"POST"})
@@ -108,7 +107,6 @@ class ApiClientController extends AbstractController
         }
 
     }
-
 
     /**
      * @Route("/api/clients/{id}/users", name="api_User_delete",methods={"DELETE"})

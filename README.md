@@ -31,7 +31,7 @@ Service exposant Une API Rest avec le framework symfony.
  Mettre a jour les entités en base de donnée
 - bin/console doctrine:schema:update -f
 
-5  Lancer les fixtures pour avoir des données de test en base
+5 Lancer les fixtures pour avoir des données de test en base
 - bin/console doctrine:fixtures:load
 
 6 Démarrer Votre serveur avec la commande ci-dessous :
@@ -45,6 +45,10 @@ Service exposant Une API Rest avec le framework symfony.
 
 
 - plus d'info pour installer le logiciel Postman en visitant ce lien : https://www.postman.com/downloads/
+
+# Annexe :
+- Lien d'analyse du code ci-dessous : 
+- https://codeclimate.com/github/Elhadj75BAH/API-REST
 
 
 

@@ -4,7 +4,6 @@ nelmio_api_doc:
         default:
             path_patterns:
                 - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
-                - ^/api(?!/api/login_check$) # Accepts routes under /api except /api/doc
 
     documentation:
         info:
@@ -48,8 +47,7 @@ nelmio_api_doc:
                                         properties:
                                             token:
                                                 type: string
-                                            refresh_token:
-                                                type: string
+
                         '401':
                             description: Invalid credentials
                         '400':

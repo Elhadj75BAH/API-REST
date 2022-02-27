@@ -1,4 +1,11 @@
 nelmio_api_doc:
+
+    areas: # to filter documented areas
+        default:
+            path_patterns:
+                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+                - ^/api(?!/api/login_check$) # Accepts routes under /api except /api/doc
+
     documentation:
         info:
             title: Projet 7
@@ -15,7 +22,36 @@ nelmio_api_doc:
         security:
             - Bearer: [ ]
 
-    areas: # to filter documented areas
-        default:
-            path_patterns:
-                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+        paths:
+            /api/login_check:
+                post:
+                    tags:
+                        - Login
+                    summary: your identifiers to obtain a token
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        username:
+                                            type: string
+                                        password:
+                                            type: string
+                                    type: object
+                    responses:
+                        '200':
+                            description: Success !
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+                                            refresh_token:
+                                                type: string
+                        '401':
+                            description: Invalid credentials
+                        '400':
+                            description: Invalid JSON.
+                    security: [ ]

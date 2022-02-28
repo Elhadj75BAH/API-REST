@@ -29,7 +29,12 @@ class ApiProductController extends AbstractController
      * @OA\Response(
      *     response="200",
      *
-     *     description="Return to the list of BileMo products")
+     *     description="Return to the list of BileMo products",
+     *       @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(ref=@Model(type=Product::class, groups={"product-list:read"}))
+     * )
+     * )
      *  @OA\Tag(name="Product")
      * @OA\Parameter(in="query", name="page", required=false,  description="Page à recuperer ")
      */

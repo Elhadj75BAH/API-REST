@@ -1,4 +1,10 @@
 nelmio_api_doc:
+
+    areas: # to filter documented areas
+        default:
+            path_patterns:
+                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+
     documentation:
         info:
             title: Projet 7
@@ -15,7 +21,54 @@ nelmio_api_doc:
         security:
             - Bearer: [ ]
 
-    areas: # to filter documented areas
-        default:
-            path_patterns:
-                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+        paths:
+            /api/login_check:
+                post:
+                    tags:
+                        - Login
+                    summary: to generate a token of the api
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        username:
+                                            type: string
+                                        password:
+                                            type: string
+                                    type: object
+                    responses:
+                        '200':
+                            description: Success !
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+
+                        '401':
+                            description: Invalid credentials
+                        '400':
+                            description: Invalid JSON.
+                    security: [ ]
+
+            /api/clients/{id}/users:
+                post:
+                    tags:
+                        - Client
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        firstName:
+                                            type: string
+                                        lastName:
+                                            type: string
+                                        avatar:
+                                            type: string
+                                        email: string
+                                    type: object
+

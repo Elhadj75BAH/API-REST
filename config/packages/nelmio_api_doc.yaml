@@ -26,7 +26,7 @@ nelmio_api_doc:
                 post:
                     tags:
                         - Login
-                    summary: your identifiers to obtain a token
+                    summary: to generate a token of the api
                     requestBody:
                         content:
                             application/json:
@@ -53,3 +53,22 @@ nelmio_api_doc:
                         '400':
                             description: Invalid JSON.
                     security: [ ]
+
+            /api/clients/{id}/users:
+                post:
+                    tags:
+                        - Client
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        firstName:
+                                            type: string
+                                        lastName:
+                                            type: string
+                                        avatar:
+                                            type: string
+                                        email: string
+                                    type: object
+

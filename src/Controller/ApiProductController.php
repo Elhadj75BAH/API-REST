@@ -36,7 +36,7 @@ class ApiProductController extends AbstractController
      * )
      * )
      *  @OA\Tag(name="Product")
-     * @OA\Parameter(in="query", name="page", required=false,  description="Page à recuperer ")
+     * @OA\Parameter(in="query", name="page", required=false,  description=" the page to recover")
      */
     public function index(PaginatorInterface $paginator , Request $request, CacheInterface $cache): Response
     {

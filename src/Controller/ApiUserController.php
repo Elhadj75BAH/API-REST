@@ -32,7 +32,7 @@ class ApiUserController extends AbstractController
      *     in="query",
      *     name="page",
      *     required=false,
-     *     description="page à recuperer ")
+     *     description="the page to recover ")
      */
     public function index(UserRepository $userRepository,
                           PaginatorInterface $paginator,

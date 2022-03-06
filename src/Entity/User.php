@@ -43,7 +43,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user:read","client:read"})
+     * @Groups({"user:read","client-detail:read"})
      * @Assert\NotBlank(message="ce champ ne peut pas être null")
      */
     private $email;
@@ -160,7 +160,8 @@ class User
      * @Groups({"user:read","client:read"})
      *
      */
-    public function  getLinkUser(){
+    public function  getLinkUser(): string
+    {
         return "/api/users/".$this->getId();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,13 +36,14 @@ class ApiProductController extends AbstractController
      *     @OA\Items(ref=@Model(type=Product::class, groups={"product-list:read"}))
      * )
      * )
-     *  @OA\Tag(name="Product")
+     * @OA\Tag(name="Product")
      * @OA\Parameter(in="query", name="page", required=false,  description=" the page to recover")
+     * @throws InvalidArgumentException
      */
     public function index(PaginatorInterface $paginator , Request $request, CacheInterface $cache): Response
     {
         $products = $cache->get('products',function (ItemInterface $item){
-            $item->expiresAfter(3);
+
             return  $this->entitymanager->getRepository(Product::class)->findAll();
         });
 
@@ -52,7 +54,6 @@ class ApiProductController extends AbstractController
         return $response;
 
     }
-
 
     /**
      * @Route("/api/products/{id}", name="api_product_detail", methods={"GET"})
@@ -67,18 +68,16 @@ class ApiProductController extends AbstractController
      * )
      * )
      * @OA\Tag(name="Product")
+     * @throws InvalidArgumentException
      */
     public function detail($id, CacheInterface $cache): Response
     {
-        $product = $cache->get('product',function (ItemInterface $item)use ($id){
-            $item->expiresAfter(3);
+        $product = $cache->get('product'.$id,function (ItemInterface $item)use ($id){
             return $this->entitymanager->getRepository(Product::class)->findOneById($id);
         });
 
-
         $response = $this->json($product,200,[],['groups'=>'product:read']);
         return $response;
-
 
     }
 }

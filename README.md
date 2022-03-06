@@ -40,7 +40,7 @@ Service exposant Une API Rest avec le framework symfony.
 - php -S localhost:8000 -t public
 - sur votre navigateur écrire l'url :http://localhost:8000/
 
-#Documentation de l'API
+# Documentation de l'API
 Pour consulter la documentation de l'API :
 - l'url : http://localhost:8000/doc
 
@@ -50,7 +50,7 @@ Pour consulter la documentation de l'API :
 - plus d'info pour installer le logiciel Postman en visitant ce lien : https://www.postman.com/downloads/
 
 
-#Compte Client - Token :
+# Compte Client - Token :
 Pour consulter les contenus de l'api vous devez être connectés.
 
 Pour générer donc le token vous permettant de se connecter, renseigner dans la route api/login_check.
@@ -65,8 +65,8 @@ Comme ci-dessous :
 - Une fois le token généré, copier le, puis coller sur la route de connexion de la page que vous souhaitez consulter. 
 Bonne visite :)
 # Annexe :
-- Lien d'analyse du code ci-dessous : 
-- https://codeclimate.com/github/Elhadj75BAH/API-REST
+- Lien d'analyse du code : https://codeclimate.com/github/Elhadj75BAH/API-REST
+- issues: https://github.com/Elhadj75BAH/API-REST/issues
 
 
 

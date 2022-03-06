@@ -40,7 +40,7 @@ Service exposant Une API Rest avec le framework symfony.
 - php -S localhost:8000 -t public
 - sur votre navigateur écrire l'url :http://localhost:8000/
 
-#Documentation de l'API
+# Documentation de l'API
 Pour consulter la documentation de l'API :
 - l'url : http://localhost:8000/doc
 

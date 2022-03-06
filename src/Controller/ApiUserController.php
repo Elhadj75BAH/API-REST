@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,21 +33,20 @@ class ApiUserController extends AbstractController
      *     in="query",
      *     name="page",
      *     required=false,
-     *     description="page à recuperer ")
+     *     description="the page to recover ")
+     * @throws InvalidArgumentException
      */
     public function index(UserRepository $userRepository,
                           PaginatorInterface $paginator,
                           Request $request,
                           CacheInterface $cache ): Response
     {
-       $users = $cache->get('users',function (ItemInterface $item)use ($userRepository, $cache){
-           $item->expiresAfter(3);
+       $users = $cache->get('users',function (ItemInterface $item) use ($userRepository){
            return $userRepository->findAll();
        });
 
         $users = $paginator->paginate($users,$request->query->getInt('page',1),10);
-        $response = $this->json($users, 200,[],['groups'=>'user:read','pagination'=>$users]);
-        return $response;
+        return $this->json($users, 200,[],['groups'=>'user:read','pagination'=>$users]);
 
     }
 
@@ -54,7 +54,7 @@ class ApiUserController extends AbstractController
     /**
      * @Route("/api/users/{id}", name="api_user_detail",methods={"GET"})
      *
-     *  @OA\Response(
+     * @OA\Response(
      *     response="200",
      *     description="Returns the details of a registered user linked to a client",
      *
@@ -64,17 +64,16 @@ class ApiUserController extends AbstractController
      * )
      * )
      * @OA\Tag(name="User")
+     * @throws InvalidArgumentException
      */
     public function detail(User $user, CacheInterface $cache): Response
     {
-        $response = $cache->get('users',function (ItemInterface $item)use ($user){
-            $item->expiresAfter(3);
+
+        return $cache->get('users'.$user->getId(),function (ItemInterface $item)use ($user){
             return $this->json($user, 200,[],[
                 'groups'=>['user:read','user-detail:read']
             ]);
         });
-
-        return $response;
 
     }
 

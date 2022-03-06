@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\User;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,16 +32,15 @@ class ApiClientController extends AbstractController
      * )
      * )
      * @OA\Tag(name="Client")
+     * @throws InvalidArgumentException
      */
-    public function index(ClientRepository $clientRepository, CacheInterface $cache ): Response
+    public function index(ClientRepository $clientRepository,
+                          CacheInterface $cache): Response
     {
         $clients = $cache->get('clients',function (ItemInterface $item)use ($clientRepository){
-            $item->expiresAfter(3);
             return $clientRepository->findAll();
         });
-
-        $response = $this->json($clients,200,[],['groups'=>'client:read']);
-        return $response;
+        return $this->json($clients,200,[],['groups'=>'client:read']);
     }
 
     /**
@@ -55,18 +55,15 @@ class ApiClientController extends AbstractController
      * )
      * )
      * @OA\Tag(name="Client")
+     * @throws InvalidArgumentException
      */
-    public function details(ClientRepository $clientRepository, $id , CacheInterface $cache): Response
+    public function details(Client $client, CacheInterface $cache): Response
     {
-        $clients = $cache->get("clients",function (ItemInterface $item) use ($id, $clientRepository){
-            $item->expiresAfter(3);
-            return $clientRepository->findOneById($id);
+        return $cache->get('clients'.$client->getId(),function (ItemInterface $item)use ($client){
+            return $this->json($client, 200,[],[
+                'groups'=>['client:read','client-detail:read']
+            ]);
         });
-
-        $response = $this->json($clients,200,[],[
-            'groups'=>['client:read','client-detail:read']
-        ]);
-        return $response;
     }
 
     /**
@@ -76,13 +73,15 @@ class ApiClientController extends AbstractController
      *     description="adds a new user linked to a client",
      * )
      * @OA\Tag(name="Client")
+     * @throws InvalidArgumentException
      */
     public function addUser( Request $request,
                              SerializerInterface $serializer,
                              EntityManagerInterface $em,
-                            ValidatorInterface $validator, Client $client): Response
+                             ValidatorInterface $validator, Client $client,
+                             CacheInterface $cache): Response
     {
-
+        $cache->delete('clients');
         $jsonAdd = $request->getContent();
         try {
             /** @var User $userAdd */
@@ -114,7 +113,8 @@ class ApiClientController extends AbstractController
      * @OA\Response(
      *     response="204",
      *     description="deletes a user added by a client")
-     *  @OA\Tag(name="Client")
+     * @OA\Tag(name="Client")
+     * @throws InvalidArgumentException
      */
     public function delete(EntityManagerInterface $em, User $user , CacheInterface $cache): Response
     {
@@ -123,6 +123,5 @@ class ApiClientController extends AbstractController
             $em->flush();
             return $this->json(null,204,[]);
     }
-
 
 }
